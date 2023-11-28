@@ -31,7 +31,7 @@ NOT_Mono = [3 3	3	2;
 Mono = [3	3	3	2;
         2	1	1	2;
         3 1	3	3];
-Mat = Mono;
+Mat = Mono
 
 A = (Mat==1);
 B = (Mat==2);
@@ -39,7 +39,7 @@ C = any(Mat==1);
 D = any(Mat==2);
 E = (any(Mat==1) .* any(Mat==2));
 F = any(any(Mat==1) .* any(Mat==2));
-IsMono = ~F;
+IsMono = ~F
 
 
 %-----3-------------------------------------------------
