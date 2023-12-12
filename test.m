@@ -16,15 +16,15 @@
 %
 %Mat(1,:);  %Line
 %Mat(:,1); %column
-%---1---------------------------------------------
+%---------------------------1--------------------
 F_dontCareCube = [  3	3	3	3;3	1	2	3;
                     2	1	1	2;3	1	2	3];
-Mat = F_dontCareCube;
-A = Mat == 3;
-B = all(Mat == 3, 2);
-C = any(all(Mat == 3, 2));
+Mat = F_dontCareCube
+A = Mat == 3
+B = all(Mat == 3, 2)
+C = any(all(Mat == 3, 2))
 
-%---2--------------------------------------------------
+%-----------------------2--------------------
 NOT_Mono = [3 3	3	2;
             2	1	1	2;
             3	2	3	3];
@@ -33,13 +33,36 @@ Mono = [3	3	3	2;
         3 1	3	3];
 Mat = Mono
 
-A = (Mat==1);
-B = (Mat==2);
-C = any(Mat==1);
-D = any(Mat==2);
-E = (any(Mat==1) .* any(Mat==2));
-F = any(any(Mat==1) .* any(Mat==2));
+A = (Mat==1)
+B = (Mat==2)
+C = any(Mat==1)
+D = any(Mat==2)
+E = (any(Mat==1) .* any(Mat==2))
+F = any(any(Mat==1) .* any(Mat==2))
 IsMono = ~F
+
+etape5_est_une_tauto = [
+1	3	3	3	2	2
+1	1	2	3	2	2
+1	1	2	1	3	1
+2	3	1	1	3	3
+3	3	3	2	2	1
+3	2	1	1	1	3
+3	3	3	2	2	3
+3	3	1	3	1	2
+2	3	2	3	3	3
+2	1	1	2	3	3
+3	1	3	3	3	3
+2	2	2	2	1	3
+3	3	2	3	2	3
+3	2	3	3	1	3
+3	3	3	1	1	3
+2	3	2	3	3	1
+3	1	3	3	2	1
+1	2	3	3	3	3
+];
+
+
 
 
 %-----3-------------------------------------------------
@@ -58,31 +81,46 @@ PK = [3	2	3	3
       3	1	3	3
       1	3	3	3];
 
-Mat = OK;
+A = [1 2 3 2;
+     2 1 3 2;
+     1 2 3 3;
+     1 2 3 1];
+
+Mat = OK
 % Check if row is univariable
 %  Check if two rows are complementary
 
- %How is it possible for this to work before declaration ???
-OK1 = (OK==1); %not needed OKn filters for the value n
-S = sum(OK1');   %sum rows
-OK1_Indicator = S==1;
-sgl_1_filter = OK1 .* OK1_Indicator';
-sgl_2_filter = (OK==2) .* (sum((OK==2)')==1)';
-A = any(sgl_1_filter) .* any(sgl_2_filter);
-any(A);
 
-Mat = OK;
+
+
 
 %---Check if deux cubes sont complémentaires
-    Mat1 = (Mat==1) ;       %indicator matrix for "1" (keep only 1's)
-    S = sum(Mat1')  ;        %sum ROWS (first transpose Mat1, because default sums columns)
-    Mat1_Indicator = (S==1);                              %keep only lines with zeroes and a single 1 (keep only 1's of vector)
-    filter_single_ones = Mat1 .* (Mat1_Indicator)';        %keep only lines with zeroes and a single 1 (mult with transposed indicator)
-    single_ones_line_indicator = any(filter_single_ones);   %vector indicating which line has a singleton of "1"
-    single_twos_line_indicator = any( (Mat==2) .* (sum((Mat==2)')==1)'); %same as before but with "2" instead of "1".
-                                                                           %(!! indicator for "2" is a matrix with 1's
-                                                                            % representing the presence of 2's)
-    res = any(single_ones_line_indicator .* single_twos_line_indicator);
+
+Mat3 = (Mat == 3);  % Create a logical matrix indicating lines with len-1 "3"s
+S = sum(Mat3, 2);    % Sum along each row
+complRows = find(S == size(Mat, 2) - 1); % Find the lines with len-1 "3"s
+complMat = Mat(complRows, :);             % Keep only the lines indicated by  in the Mat matrix
+
+contains1 = any(complMat == 1);      % Check if any row has value 1
+contains2 = any(complMat == 2);       % Check if any row has value 2
+result = any(contains1 .* contains2);  % Check if there is any row that contains both 1 and 2
+
+%res = any( (any( Mat(find(sum(Mat3, 2) == size(Mat, 2) - 1, :) == 1))) .* (any((any( Mat(find(sum(Mat3, 2) == size(Mat, 2) - 1, :) == 2)))
+
+
+    %---WRONG-----
+                              %Mat1 = (Mat==1) ;       %indicator matrix for "1" (keep only 1's)
+                              %S = sum(Mat1')  ;        %sum ROWS (first transpose Mat1, because default sums columns)
+                              %Mat1_Indicator = (S==1);                              %keep only lines with zeroes and a single 1 (keep only 1's of vector)
+                              %filter_single_ones = Mat1 .* (Mat1_Indicator)';        %keep only lines with zeroes and a single 1 (mult with transposed indicator)
+                              %single_ones_line_indicator = any(filter_single_ones);   %vector indicating which line has a singleton of "1"
+                              %single_twos_line_indicator = any( (Mat==2) .* (sum((Mat==2)')==1)'); %same as before but with "2" instead of "1".
+                                                                                                     %(!! indicator for "2" is a matrix with 1's
+                                                                                                      % representing the presence of 2's)
+                              %res = any(single_ones_line_indicator .* single_twos_line_indicator);
+
+
+
 
 
 
@@ -111,7 +149,7 @@ exo_sylla = [1 1 3
 %Choisir la variable la + biforme et balancée
 
 %else
-Mat = exo_sylla
+Mat = exo_sylla;
 
 mostBinate = sum(Mat==3)==min(sum(Mat==3))
               %A = (Mat==3); %indicator matrix for 3
@@ -125,27 +163,27 @@ mostBalanced = (abs(sum(Mat==1)-sum(Mat==2))+1)
               %abs(A-B);
               %mostBalanced =(abs(A-B) + 1); %create a vector with the number of apparition of the most represented var in each column.
 
-if any(any(Mat==1)&any(Mat==2))  % if there is at least 1 column with both "1" and "2".
-    x = mostBinate .* mostBalanced
+if any(any(Mat==1)&any(Mat==2));  % if there is at least 1 column with both "1" and "2".
+    x = mostBinate .* mostBalanced;
 
 else  %  if there are no columns with 1's and 2's.
-    x = mostBinate*1
+    x = mostBinate*1;
 endif
 
 
 x(x==0) = NaN; %replace zero's with Nan to get rid of the zero's and use min(x).
-[minVal, index] = min(x) %exctract the smallest number and its index in the list (~:discard).
+[minVal, index] = min(x); %exctract the smallest number and its index in the list (~:discard).
 
 N = Mat;
-    A = N(:,index) %extract the mostBinate column.
-    B = (A==1)
-    C = find(B) %find the indexes of non-zero values.
-    N(C,:) = []  %extract the lines from those indexes.
-    N(:,index) = 3
+    A = N(:,index); %extract the mostBinate column.
+    B = (A==1);
+    C = find(B); %find the indexes of non-zero values.
+    N(C,:) = [];  %extract the lines from those indexes.
+    N(:,index) = 3;
 P = Mat;
-    A = find(N(:,index)==2)
-    P(A,:) = []
-    P(:,index) = 3  %remove the chosen mostBinate column.
+    A = find(N(:,index)==2);
+    P(A,:) = [];
+    P(:,index) = 3 ; %remove the chosen mostBinate column.
 
 
 
@@ -160,20 +198,7 @@ P = Mat;
 
 
 %-------------------5---------------------------------------------
-etap5 = [ 1 3	1	1	2	2
-          1	1	2	3	2	2
-          1	1	2	1	1	1
-          2	3	1	1	3	3
-          3	3	3	2	2	1
-          2	2	1	1	1	2
-          3	1	3	2	2	3
-          2	3	1	3	1	2
-          2	2	2	3	3	3
-          2	1	1	2	3	3
-          3	1	3	3	1	3
-          2	2	2	2	1	1
-          2	3	2	2	2	1
-          2	2	2	1	1	1];
+
 
 
 
